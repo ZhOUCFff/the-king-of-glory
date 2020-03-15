@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <scroll class="scroll" click>
     <!-- 轮播图 -->
     <swiper v-if="adList" :options="swiperOption">
       <swiper-slide v-for="(item,i) in adList[0].items" :key="i">
@@ -61,7 +61,7 @@
         </ul>
       </template>
     </card>
-  </div>
+  </scroll>
 </template>
  
 <script>
@@ -70,6 +70,7 @@ import dayjs from 'dayjs'
 import { getAds, getNews, getHeros } from 'network/home'
 
 import Card from 'components/content/Card'
+import Scroll from '../../components/common/scroll/Scroll'
 
 export default {
   name: "Main",
@@ -79,7 +80,8 @@ export default {
     }
   },
   components: {
-    Card
+    Card,
+    Scroll
   },
   data() {
     return {
@@ -190,6 +192,11 @@ export default {
 </script>
  
 <style lang="scss" scoped>
+.scroll {
+  height: calc(100vh - 3.48rem);
+  overflow: hidden;
+}
+
 //精灵图部分
 .entry {
   border-top: 0.04rem solid #d4d9de;

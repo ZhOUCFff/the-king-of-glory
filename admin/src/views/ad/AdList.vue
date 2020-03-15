@@ -1,9 +1,6 @@
 <template>
   <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>文章列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <Breadcrumb text="广告位列表" />
 
     <el-card>
       <el-button type="primary" @click="addAd">添加广告位</el-button>
@@ -22,7 +19,6 @@
       class="add-ad-dialog"
       :title="!this.model._id?'添加广告位':'编辑广告位'"
       :visible.sync="dialogVisible"
-      width="60%"
       @closed="dialogClose"
     >
       <el-form label-width="86px">
@@ -66,6 +62,8 @@
 </template>
  
 <script>
+import Breadcrumb from '../../components/commom/Breadcrumb'
+
 //导入网络请求函数
 import { createAd, deleteAd, getAdList, getAd, updateAd } from 'network/admin/ad'
 
@@ -86,6 +84,9 @@ export default {
       },
       id: ''
     }
+  },
+  components: {
+    Breadcrumb
   },
   methods: {
     //请求广告位列表数据
@@ -152,7 +153,7 @@ export default {
 }
 </script>
  
-<style scoped>
+<style>
 .ad-img {
   width: 280px;
   vertical-align: middle;
@@ -162,5 +163,8 @@ export default {
 }
 .el-card {
   padding: 10px 0;
+}
+.add-ad-dialog .el-dialog {
+  width: 1000px;
 }
 </style>

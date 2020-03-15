@@ -29,6 +29,7 @@ const routes = [
   {
     path: '/',
     component: Main,
+    redirect: '/category',
     children: [
       //分类
       { path: 'category', component: Category },

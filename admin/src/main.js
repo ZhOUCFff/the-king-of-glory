@@ -1,11 +1,10 @@
 import Vue from 'vue'
+import './plugins/element.js'
 import App from './App.vue'
 import router from './router'
 
 import TreeTable from 'vue-table-with-tree-grid'
 Vue.component('tree-table', TreeTable)
-
-import './plugins/element.js'
 
 import 'nprogress/nprogress.css'
 

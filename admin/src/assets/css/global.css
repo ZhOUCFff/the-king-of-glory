@@ -33,8 +33,8 @@
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 125px;
-  height: 125px;
+  width: 178px;
+  height: 178px;
   line-height: 178px;
   text-align: center;
 }
@@ -75,4 +75,8 @@
 
 .el-rate {
   padding-top: 12px;
+}
+
+.el-dialog {
+  min-width: 500px;
 }

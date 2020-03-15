@@ -5,7 +5,7 @@
       <el-breadcrumb-item>{{id?'编辑':'创建'}}文章</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-      <el-form label-width="120px" @submit.native.prevent="save">
+      <el-form label-width="80px" @submit.native.prevent="save">
         <el-form-item label="所属分类">
           <el-select v-model="model.cate" placeholder="请选择所属分类" clearable multiple>
             <el-option

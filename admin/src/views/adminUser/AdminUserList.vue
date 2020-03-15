@@ -1,9 +1,6 @@
 <template>
   <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <Breadcrumb text="用户列表" />
 
     <el-card>
       <el-button type="primary" @click="addUser">添加用户</el-button>
@@ -24,7 +21,7 @@
       width="50%"
       @closed="dialogClose"
     >
-      <el-form label-width="120px">
+      <el-form label-width="60px">
         <el-form-item label="用户名">
           <el-input v-model="model.username"></el-input>
         </el-form-item>
@@ -41,6 +38,8 @@
 </template>
  
 <script>
+import Breadcrumb from '../../components/commom/Breadcrumb'
+
 //导入网络请求函数
 import { deleteAdminUser, getAdminUserList, createAdminUser, updateAdminUser, getAdminUser } from 'network/admin/adminUser'
 
@@ -54,6 +53,9 @@ export default {
       model: {},
       dialogVisible: false
     }
+  },
+  components: {
+    Breadcrumb
   },
   methods: {
     //请求物品列表数据
