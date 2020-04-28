@@ -1,13 +1,17 @@
 <template>
   <div id="app">
     <!-- 顶栏 -->
-    <top-bar class="top-bar" v-if="isShowTop" />
+    <top-bar v-if="isTopBarShow" class="top-bar" />
 
     <!-- 导航栏 -->
-    <nav-bar v-if="isShowNav" class="main-nav" height="1.68rem" />
+    <nav-bar v-if="isNavBarShow" class="main-nav" height="1.68rem" />
 
     <!-- 路由 -->
-    <router-view />
+    <transition name="slide" mode="out-in">
+      <keep-alive>
+        <router-view class="view" />
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
@@ -22,11 +26,14 @@ export default {
     NavBar
   },
   computed: {
-    isShowTop() {
-      return this.$route.path.indexOf('/home') !== -1
+    path() {
+      return this.$route.path
     },
-    isShowNav() {
-      return (this.$route.path.indexOf('/home') !== -1 || this.$route.path.indexOf('/article') !== -1) ? true : false
+    isTopBarShow() {
+      return (this.path === '/home' || this.path === '/strategy' || this.path === '/race') || this.$store.state.isTopBarShow
+    },
+    isNavBarShow() {
+      return (this.path === '/home' || this.path === '/strategy' || this.path === '/race') || this.$store.state.isNavBarShow
     }
   }
 }
@@ -36,10 +43,14 @@ export default {
 // 导入初始化样式
 @import "~assets/css/normal.scss";
 
-//导航栏
-.main-nav {
-  margin-top: 1.8rem;
+.scroll {
+  touch-action: none;
 }
+
+//导航栏
+// .main-nav {
+//   margin-top: 1.8rem;
+// }
 
 //轮播图的分页器样式
 .swiper-pagination {
@@ -55,5 +66,28 @@ export default {
       background: #4b67af;
     }
   }
+}
+
+// 路由过渡效果
+.view {
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+  // transition-delay: 0.1s;
+}
+
+.slide-enter {
+  -webkit-transform: translate(0, 300px);
+  transform: translate(0, 100px);
+}
+.slide-enter-active {
+  -webkit-transform: translate(0, 300px);
+  transform: translate(0, 300px);
+}
+.slide-leave {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.slide-leave-active {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
 }
 </style>

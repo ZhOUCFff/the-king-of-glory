@@ -2,6 +2,14 @@
   <div>
     <breadcrumb text="英雄列表" />
     <el-card>
+      <el-row>
+        <el-col :span="6">
+          <el-input maxlength="8" clearable placeholder="请输入英雄名称" v-model="heroQuery"></el-input>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="primary" @click="searchHero">搜索</el-button>
+        </el-col>
+      </el-row>
       <el-button type="primary" @click="addHeroClick">添加英雄</el-button>
 
       <el-table :data="heroList" border stripe>
@@ -62,7 +70,8 @@ export default {
         pagenum: 1,
         pagesize: 5
       },
-      total: 0
+      total: 0,
+      heroQuery: ''
     }
   },
   methods: {
@@ -99,6 +108,10 @@ export default {
         this.$message.info('已取消删除')
       }
 
+    },
+    async searchHero() {
+      this.pageParams.query = this.heroQuery
+      this.getHeroList(this.pageParams)
     },
     handleSizeChange(pagesize) {
       this.pageParams.pagesize = pagesize

@@ -23,6 +23,14 @@ export default {
     pullUpLoad: {
       type: Boolean,
       default: false
+    },
+    bounce: {
+      type: Boolean,
+      default: false
+    },
+    scrollX: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -35,12 +43,14 @@ export default {
     this.scroll = new BScroll(this.$refs.wrapper, {
       probeType: this.probeType,
       click: this.click,
-      pullUpLoad: this.pullUpLoad
+      pullUpLoad: this.pullUpLoad,
+      bounce: this.bounce,
+      eventPassthrough: this.scrollX ? "horizontal" : "",
+      stopPropagation: true
     })
     //监听滚动事件
     this.scroll.on('scroll', (position) => {
       this.$emit('scroll', position)
-      // console.log(position);
     })
     //监听上拉加载事件
     this.scroll.on('pullingUp', () => {

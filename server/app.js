@@ -26,6 +26,9 @@ require('./routes/admin/login')(app)
 
 //前端页面请求数据接口
 require('./routes/web/index')(app)
+require('./routes/web/strategy')(app)
+require('./routes/web/race')(app)
+require('./routes/web/common')(app)
 
 // 监听服务器其他错误
 app.use((err, req, res, next) => {

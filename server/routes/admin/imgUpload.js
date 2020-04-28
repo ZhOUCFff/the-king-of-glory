@@ -42,7 +42,8 @@ module.exports = (app, multer) => {
   const ad = multer({ dest: __dirname + '/../../uploads/ads' })
   router.post('/ad', ad.single('file'), async (req, res) => {
     const file = req.file
-    file.url = `http://47.105.164.155/uploads/ads/${file.filename}`
+    // file.url = `http://47.105.164.155/uploads/ads/${file.filename}`
+    file.url = `http://localhost:3000/uploads/ads/${file.filename}`
     res.send(file)
   })
 }

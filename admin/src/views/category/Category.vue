@@ -23,7 +23,10 @@
     <el-dialog title="添加分类" :visible.sync="addDialogVisible" width="50%" @closed="addDialogClose">
       <el-form label-width="80px">
         <el-form-item label="分类名称">
-          <el-input v-model.trim="newModel.name"></el-input>
+          <el-input maxlength="10" v-model.trim="newModel.name"></el-input>
+        </el-form-item>
+        <el-form-item label="分类描述">
+          <el-input maxlength="20" v-model.trim="newModel.desc"></el-input>
         </el-form-item>
         <el-form-item label="选择分类">
           <el-cascader
@@ -46,6 +49,9 @@
       <el-form label-width="70px">
         <el-form-item label="分类名称">
           <el-input v-model="model.name"></el-input>
+        </el-form-item>
+        <el-form-item label="分类描述">
+          <el-input maxlength="20" v-model.trim="model.desc"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -105,16 +111,34 @@ export default {
     //获取分类列表
     async getCateList() {
       const res = await getCateList()
-      const data = res.data.map(item => {
-        item.children.map(item => {
-          item.disabled = true
-          item.children = null
-        })
-        return item
-      })
-      // console.log(data);
+      const data = res.data
+      // 处理分类数据
+      for (let item1 of data) {
+        // 第一层
+        if (item1.children && item1.children.length === 0) {
+          item1.children = null
+          continue
+        }
+
+        for (let item2 of item1.children) {
+          // 第二层
+          if (item2.children && item2.children.length === 0) {
+            item2.children = null
+            continue
+          }
+
+          for (let item3 of item2.children) {
+            // 第三层
+            item3.children = null
+            item3.disabled = true
+          }
+        }
+      }
+
+      console.log(data);
 
       this.cateList = data
+
     },
     handleChange() {
       // console.log(this.model.parent);
@@ -156,6 +180,9 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         })
+
+        if (row.children && row.children.length > 0) return this.$message.error('无法删除包含子分类的父级分类')
+
         const res = await deleteCate(row._id)
         if (!res) return this.$message.error('删除分类失败')
         this.$message.success('删除分类成功')

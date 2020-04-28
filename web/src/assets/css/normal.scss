@@ -1,16 +1,16 @@
 @import "./normalize";
 
-@import './varible';
+@import "./varible";
 
 // 媒体查询-----------------------------------------------------------------------
 
-html{
+html {
   font-size: 1rem;
 }
 
 @each $var in $screen_width {
   @media screen and (min-width: #{$var}) {
-    html{
+    html {
       font-size: $var/$servings;
     }
   }
@@ -35,45 +35,49 @@ html{
   flex: 1;
 }
 
-@each $key,$value in $flex_jc {
+.border-p {
+  border-color: $base_color !important;
+}
+
+@each $key, $value in $flex_jc {
   .jc-#{$key} {
     justify-content: $value;
   }
 }
 
-@each $key,$value in $flex_ai {
+@each $key, $value in $flex_ai {
   .ai-#{$key} {
     align-items: $value;
   }
 }
 
 // 定义字体大小
-@each $key,$value in $fs {
+@each $key, $value in $fs {
   .#{$key} {
     font-size: $value;
   }
 }
 
 // 定义背景颜色
-@each $key,$value  in $bgc {
+@each $key, $value in $bgc {
   .bgc-#{$key} {
     background-color: $value;
   }
 }
 
 // 定义边距
-@each $key1,$value1 in $spcing_diretion {
-  @each $key2,$value2 in $spacing_size {
+@each $key1, $value1 in $spcing_diretion {
+  @each $key2, $value2 in $spacing_size {
     .m#{$key1}#{$key2} {
-      margin-#{$value1}: $value2
+      margin-#{$value1}: $value2;
     }
     .p#{$key1}#{$key2} {
-      padding-#{$value1}: $value2
+      padding-#{$value1}: $value2;
     }
   }
 }
 
-@each $key,$value in $spacing_size {
+@each $key, $value in $spacing_size {
   .m#{$key} {
     margin: $value;
   }
@@ -94,21 +98,29 @@ html{
   }
 }
 
-@each $key,$value in $font_color {
+@each $key, $value in $font_color {
   .fc-#{$key} {
     color: $value;
   }
 }
 
+.l {
+  float: left;
+}
+
+.r {
+  float: right;
+}
+
 //清除浮动
-.clearfix:after{
+.clearfix:after {
   content: "";
   display: block;
   height: 0;
-  clear:both;
+  clear: both;
   visibility: hidden;
 }
-.clearfix{
+.clearfix {
   *zoom: 1;
 }
 
@@ -123,9 +135,23 @@ html{
   text-overflow: ellipsis;
 }
 
+.t-ellipsis-2 {
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 .w100 {
   width: 100%;
   vertical-align: middle;
+}
+
+.h100 {
+  height: 100%;
 }
 
 .bold {
@@ -143,11 +169,10 @@ html{
 
 body {
   min-width: 320px;
-  max-width: $servings*1rem;
+  max-width: $servings * 1rem;
   margin: 0 auto;
   background-color: #ededed;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.48rem;
+  font: 0.48rem/1.5 "Helvetica Neue", Helvetica, STHeiTi, "\5FAE\8F6F\96C5\9ED1", sans-serif;
 }
 
 div,
@@ -161,7 +186,7 @@ h3,
 h4,
 h5,
 h6,
-p{
+p {
   margin: 0;
   padding: 0;
 }
@@ -183,11 +208,14 @@ li {
   list-style: none;
 }
 
-a {
+a,
+a:hover,
+a:link,
+a:visited,
+a:active {
   text-decoration: none;
 }
 
 button {
   border: none;
 }
-

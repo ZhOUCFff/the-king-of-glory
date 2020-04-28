@@ -13,12 +13,18 @@
 
         <el-form-item class="username" prop="username">
           <!-- 用户名 -->
-          <el-input v-model="LoginForm.username" prefix-icon="el-icon-user-solid" placeholder="用户名"></el-input>
+          <el-input
+            @keyup.native.enter="login"
+            v-model="LoginForm.username"
+            prefix-icon="el-icon-user-solid"
+            placeholder="用户名"
+          ></el-input>
         </el-form-item>
 
         <el-form-item class="password" prop="password">
           <!-- 密码 -->
           <el-input
+            @keyup.native.enter="login"
             v-model="LoginForm.password"
             prefix-icon="el-icon-lock"
             type="password"

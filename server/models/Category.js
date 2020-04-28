@@ -6,7 +6,8 @@ const categorySchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Category',
     default: null
-  }
+  },
+  desc: { type: String }
 })
 
 categorySchema.virtual('children', {

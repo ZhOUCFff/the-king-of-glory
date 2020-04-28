@@ -1,73 +1,139 @@
 <template>
-  <scroll class="scroll" click>
-    <!-- 轮播图 -->
-    <swiper v-if="adList" :options="swiperOption">
-      <swiper-slide v-for="(item,i) in adList[0].items" :key="i">
-        <img class="w100" :src="item.img" alt />
-      </swiper-slide>
-      <div class="swiper-pagination" slot="pagination"></div>
-    </swiper>
-    <!-- 入口 -->
-    <div class="entry bgc-w m15-0 fc-2">
-      <div :class="{'entry-hidden': !isEntry}" class="hidden-height d-flex f-wrap">
-        <div class="entry-list" v-for="(item,i) in spriteData" :key="i">
-          <i :style="item.position"></i>
-          <div>{{item.text}}</div>
+  <div>
+    <scroll class="scroll" :probe-type="3" click pullUpLoad ref="homeScroll" @pullingUp="pullingUp">
+      <!-- 轮播图 -->
+      <swiper class="swiper" v-if="adList" :options="swiperOption">
+        <swiper-slide v-for="(item,i) in adList.items" :key="i">
+          <img class="w100 h100" :src="item.img" alt />
+        </swiper-slide>
+        <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
+      <!-- 入口 -->
+      <div class="entry bgc-w m15-0 fc-2">
+        <div :class="{'entry-hidden': !isEntry}" class="hidden-height d-flex f-wrap">
+          <div class="entry-list" v-for="(item,i) in spriteData" :key="i">
+            <i :style="item.position"></i>
+            <div>{{item.text}}</div>
+          </div>
+        </div>
+        <div class="entry-btn t-center" @click="entryBtnClick">
+          <i :class="{is_entry:!isEntry}"></i>
+          <span class="fc-3">{{isEntry?'收起':'展开'}}</span>
         </div>
       </div>
-      <div class="entry-btn t-center" @click="entryBtnClick">
-        <i :class="{is_entry:!isEntry}"></i>
-        <span class="fc-3">{{isEntry?'收起':'展开'}}</span>
-      </div>
-    </div>
-    <!-- 新闻资讯 -->
-    <card :data="newsList" titleBorder title="新闻资讯">
-      <i class="card-icon-l" slot="icon-l"></i>
-      <i class="card-icon-r" slot="icon-r"></i>
-      <template slot-scope="scope">
-        <div
-          class="fs14 d-flex mb15"
-          v-for="item in scope.item.news_list"
-          :key="item._id"
-          @click="newsClick(item._id)"
-        >
-          <span class="cate_name">[{{item.cate_name}}]</span>
-          <span>|</span>
-          <span class="t-ellipsis flex1 pr8">{{item.title}}</span>
-          <span>{{item.updatedAt | date}}</span>
-        </div>
-      </template>
-    </card>
-    <!-- 英雄列表 -->
-    <card :data="heroList" titleBorder title="英雄列表" class="hero-list m15-0">
-      <i class="card-icon-l" slot="icon-l"></i>
-      <i class="card-icon-r" slot="icon-r"></i>
-      <div slot="img">
-        <img class="w100 mt15" src="~assets/img/common/new_hero.jpg" alt />
-      </div>
-      <template slot-scope="scope">
-        <ul class="clearfix mb15">
-          <li
-            class="hero"
-            v-for="item in scope.item.hero_list"
+      <!-- 新闻资讯 -->
+      <card :data="newsList" titleBorder title="新闻资讯">
+        <i class="card-icon-l" slot="icon-l"></i>
+        <i class="card-icon-r" slot="icon-r"></i>
+        <template slot-scope="scope">
+          <a
+            class="fs14 d-flex mb15"
+            v-for="item in scope.item.news_list"
+            :href="item.url"
             :key="item._id"
-            @click="heroClick(item._id)"
+            @click="newsClick(item._id)"
           >
-            <div class="avatar-container">
-              <img class="hero-avatar" :src="item.avatar" />
-            </div>
-            <h3 class="fs12 fc-2 mt5">{{item.name}}</h3>
-          </li>
-        </ul>
-      </template>
-    </card>
-  </scroll>
+            <span class="cate_name">[{{item.cate_name}}]</span>
+            <span style="margin: 0 0.04rem">|</span>
+            <span class="t-ellipsis flex1 pr8 fc-2">{{item.title}}</span>
+            <!-- <span>{{item.updatedAt | date}}</span> -->
+            <span class="fc-8">{{item.date}}</span>
+          </a>
+        </template>
+      </card>
+      <!-- 英雄列表 -->
+      <card :data="heroList" titleBorder title="英雄列表" class="hero-list mt15">
+        <i class="card-icon-l" slot="icon-l"></i>
+        <i class="card-icon-r" slot="icon-r"></i>
+        <div slot="img">
+          <img
+            class="w100 mt15"
+            style="border-radius: 0.08rem"
+            src="~assets/img/common/new_hero.jpg"
+            alt
+          />
+        </div>
+        <template slot-scope="scope">
+          <ul class="clearfix pb15 pt5">
+            <li
+              class="hero"
+              v-for="item in scope.item.hero_list"
+              :key="item._id"
+              @click="heroClick(item._id)"
+            >
+              <div class="avatar-container">
+                <img class="hero-avatar" :src="item.avatar" />
+              </div>
+              <h3 class="fs12 fc-2 mt5">{{item.name}}</h3>
+            </li>
+          </ul>
+        </template>
+      </card>
+      <!-- 精彩视频 -->
+      <card :data="videoList" titleBorder title="精彩视频" class="video-list mt15">
+        <i class="card-icon-l" slot="icon-l"></i>
+        <i class="card-icon-r" slot="icon-r"></i>
+        <template slot-scope="scope">
+          <ul class="video-container">
+            <li class="video" v-for="item in scope.item.videos" :key="item._id">
+              <a :href="item.url" class="fc-9">
+                <img :src="item.img" />
+                <p class="fc-2">{{item.title}}</p>
+                <div class="v-info">
+                  <span class="v-num">
+                    <i></i>
+                    {{item.play_volume}}
+                  </span>
+                  <span>{{item.createdAt | date }}</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </template>
+        <div
+          class="load-more fc-7 t-center"
+          slot="bottom"
+          @click="()=>{$router.push('/strategy')}"
+        >加载更多内容</div>
+      </card>
+      <!-- 图文攻略 -->
+      <card
+        :data="graphicList"
+        titleBorder
+        title="图文攻略"
+        class="graphic-list mt15"
+        @cardNavClick="cardNavClick"
+      >
+        <i class="card-icon-l" slot="icon-l"></i>
+        <i class="card-icon-r" slot="icon-r"></i>
+        <template slot-scope="scope">
+          <ul class="graphic-container">
+            <li class="graphic" v-for="item in scope.item.graphic_list" :key="item._id">
+              <a class="clearfix" :href="item.url">
+                <img :src="item.img" />
+                <div class="graphic-content">
+                  <h5 class="t-ellipsis fs15 fc-2">{{item.title}}</h5>
+                  <p class="fc-6">{{item.title}}</p>
+                  <span class="fc-9">{{item.createdAt | date}}</span>
+                </div>
+              </a>
+            </li>
+            <li
+              class="fc-9 t-center"
+              style="height:1.4rem;line-height:1.4rem"
+              @click="seeMore"
+            >{{pageNum===3 || isSeeMore?"点击查看更多":"上拉加载更多"}}</li>
+          </ul>
+        </template>
+      </card>
+    </scroll>
+  </div>
 </template>
  
 <script>
 import dayjs from 'dayjs'
 
-import { getAds, getNews, getHeros } from 'network/home'
+import { getAds, getNews, getHeros, getVideos, getGraphics } from 'network/home'
 
 import Card from 'components/content/Card'
 import Scroll from '../../components/common/scroll/Scroll'
@@ -75,8 +141,11 @@ import Scroll from '../../components/common/scroll/Scroll'
 export default {
   name: "Main",
   filters: {
+    playVolume(val) {
+      return val.length >= 5 ? parseFloat(val / 10000).toFixed(1) + '万' : val
+    },
     date(val) {
-      return dayjs(val).format('MM/DD')
+      return dayjs(val).format('MM-DD')
     }
   },
   components: {
@@ -88,7 +157,7 @@ export default {
       swiperOption: {
         loop: true,
         autoplay: {
-          delay: 2500,
+          delay: 3000,
           disableOnInteraction: false
         },
         pagination: {
@@ -152,14 +221,26 @@ export default {
       isEntry: false,
       //新闻列表数据
       newsList: [],
-      heroList: []
+      heroList: [],
+      videoList: [],
+      graphicList: [],
+      // 上拉加载参数
+      pageNum: 1,
+      currentGraphic: 0,
+      isSeeMore: false
+    }
+  },
+  computed: {
+    scroll() {
+      return this.$refs.homeScroll
     }
   },
   methods: {
     async getAds() {
       const res = await getAds()
       if (!res) return
-      this.adList = res.data
+      this.adList = res.data[0]
+      // console.log(res.data);
     },
     async getNews() {
       const res = await getNews()
@@ -170,6 +251,60 @@ export default {
       const res = await getHeros()
       if (!res) return
       this.heroList = res.data
+      // console.log(this.heroList);
+    },
+    async getVideos() {
+      const res = await getVideos()
+      if (!res) return
+      this.videoList = res.data
+      // console.log(this.videoList)
+    },
+    async getGraphics() {
+      const res = await getGraphics()
+      if (!res) return
+      this.graphicList = res.data
+      // console.log(this.graphicList)
+    },
+    // 上拉加载
+    async pullingUp() {
+      this.scroll.refresh()
+      // console.log(this.pageNum);
+      if (this.pageNum === 3) return
+      const res = await getGraphics({
+        id: this.graphicList[this.currentGraphic]._id,
+        pageNum: this.pageNum
+      })
+      // 如果拿到结果则让页数＋1，并重启下拉加载事件
+      // 如果服务器出现错误，则重启下拉加载事件
+      // 如果没有更多数据或页数等于3时，则终止下拉加载
+      if (!res) return this.scroll.finishPullUp()
+      if (res.data.length === 0) return this.isSeeMore = true
+
+      this.graphicList[this.currentGraphic].graphic_list.push(...res.data)
+      this.scroll.refresh()
+      this.scroll.finishPullUp()
+
+      this.pageNum++
+
+    },
+    // 查看更多
+    seeMore() {
+      if (this.pageNum === 3) return this.$router.push('/strategy')
+    },
+    cardNavClick(i) {
+      this.currentGraphic = i
+      if (this.graphicList[this.currentGraphic].graphic_list.length > 16) {
+        this.pageNum = 3
+        this.isSeeMore = false
+      } else if (this.graphicList[this.currentGraphic].graphic_list.length <= 16 && this.graphicList[this.currentGraphic].graphic_list.length > 8) {
+        this.pageNum = 2
+        this.isSeeMore = false
+        this.scroll.finishPullUp()
+      } else {
+        this.pageNum = 1
+        this.isSeeMore = false
+        this.scroll.finishPullUp()
+      }
     },
     entryBtnClick() {
       this.isEntry = !this.isEntry
@@ -178,8 +313,6 @@ export default {
       this.$router.push(`/article/${id}`)
     },
     heroClick(id) {
-      // console.log(id);
-
       this.$router.push(`/hero/${id}`)
     }
   },
@@ -187,6 +320,14 @@ export default {
     this.getAds()
     this.getNews()
     this.getHeros()
+    this.getVideos()
+    this.getGraphics()
+  },
+  mounted() {
+    this.scroll.refresh()
+  },
+  activated() {
+    this.scroll.refresh()
   }
 }
 </script>
@@ -195,6 +336,11 @@ export default {
 .scroll {
   height: calc(100vh - 3.48rem);
   overflow: hidden;
+}
+
+.swiper {
+  height: 6.76rem;
+  margin-top: 0.6rem;
 }
 
 //精灵图部分
@@ -306,11 +452,6 @@ i[class^="card-icon"] {
 .cate_name {
   color: #464f73;
 }
-.hero-list {
-  .card-icon-l {
-    background-position: -6.8rem -10.68rem;
-  }
-}
 
 //轮播图分页按钮
 .swiper-pagination {
@@ -334,6 +475,127 @@ i[class^="card-icon"] {
       width: 100%;
       vertical-align: middle;
     }
+  }
+}
+
+.video-container {
+  margin: 0 -0.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  .video {
+    width: 50%;
+    padding: 0 0.1rem;
+    margin-bottom: 0.5rem;
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      img {
+        width: 100%;
+        height: 3.8rem;
+        border-radius: 0.08rem;
+        vertical-align: middle;
+      }
+      p {
+        width: 99%;
+        height: 1.52rem;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        font-size: 0.52rem;
+        margin-top: 0.36rem;
+      }
+      .v-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 1rem;
+        .v-num {
+          padding-left: 0;
+        }
+        // .v-time {
+        // }
+      }
+    }
+  }
+}
+
+.graphic-container {
+  li:nth-last-child(2) {
+    a {
+      border-bottom: 0.04rem solid #f9f9f9;
+    }
+  }
+
+  .graphic {
+    margin-bottom: 0.4rem;
+    &:last-child a {
+      border: 0;
+    }
+    a {
+      display: block;
+      width: 100%;
+      padding-bottom: 0.2rem;
+      border-bottom: 0.04rem solid #e9ecee;
+      img {
+        float: left;
+        width: 4.64rem;
+        height: 2.8rem;
+        margin-right: 0.4rem;
+      }
+      .graphic-content {
+        float: left;
+        width: 7.6rem;
+        height: 3rem;
+        p {
+          height: 1.48rem;
+          text-overflow: -o-ellipsis-lastline;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+  }
+}
+
+.hero-list {
+  .card-icon-l {
+    background-position: -6.8rem -10.68rem;
+  }
+}
+
+.video-list {
+  .card-icon-l {
+    background-position: 0 -10.04rem;
+  }
+  .load-more {
+    height: 1.44rem;
+    border-top: 0.04rem solid #f9f9f9;
+    line-height: 1.44rem;
+  }
+}
+
+.graphic-list {
+  .card-icon-l {
+    background-position: 0 -11.08rem;
+  }
+}
+
+.v-num {
+  i {
+    display: inline-block;
+    background: url("~assets/img/strategy/sprite.png") no-repeat 0 -1.64rem;
+    background-size: 3.52rem 3.12rem;
+    width: 0.56rem;
+    height: 0.48rem;
   }
 }
 </style>

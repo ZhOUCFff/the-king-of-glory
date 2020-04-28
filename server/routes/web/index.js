@@ -6,33 +6,16 @@ module.exports = app => {
   const Category = mongoose.model('Category')
   const Article = mongoose.model('Article')
   const Hero = mongoose.model('Hero')
-  const Item = mongoose.model('Item')
+  // const Item = mongoose.model('Item')
+  const Strategy = mongoose.model('Strategy')
 
-  app.use('/web/api', router)
+  app.use('/web/api/home', router)
 
   //轮播图接口
   router.get('/ads', async (req, res) => {
     const model = await Ad.find()
     res.send(model)
   })
-
-  //插入新闻数据>>>>>>>>>>>>>>>>>>>>>>
-
-  // router.get('/news/init', async (req, res) => {
-  //   const parent = await Category.find().where({ name: '新闻资讯' }).lean()
-  //   const cats = await Category.find().where({ parent: parent }).lean()
-  //   const newsTitls = ["五岳皮肤研发全纪实丨鼠年限定首曝，还原五岳东方之美", "新版本预告②丨S18荣耀战令更新，昭君新衣抢先看！", "新版本预告①丨S18赛季即将来袭，峡谷调整抢先知", "新皮肤爆料丨脚踏火箭，手持星星！猫鼠组合星际奇妙冒险", "新英雄蒙犽丨子弹分裂转弯，全图支援跟踪导弹！", "1月6日全服不停机更新公告", "【已开服】1月2日抢先服“强者之路”版本更新公告", "1月4日体验服停机更新公告", "1月3日抢先服不停机更新公告", "1月3日体验服停机更新公告", "抢先服新赛季更新 新版本福利等你来拿", "新年有心意 峡谷送好礼", "欢喜迎双旦 暖心好礼邀你峡谷狂欢", "恭喜AG超玩会获得秋季赛总冠军！冠军庆典惊喜不断", "KPL限定皮肤【天狼征服者】全服购买开启公告", "聚有荣耀！冬冠团聚夜今日18:00正式开启，观看直播赢团聚机票", "QGhappy夺得冰凤凰杯成为“五冠王”，王者荣耀冬季冠军杯广州完美落幕", "王者荣耀冬季冠军杯总决赛今日17:30开战，观赛赢貂蝉FMVP永久皮肤！", "校园共创，第六届王者荣耀高校联赛主题曲《王者少年英雄梦》强势来袭！", "高校自制57S动画短片：见证历届高校联赛荣耀时刻！"]
-  //   const newsList = newsTitls.map(title => {
-  //     const randomCats = cats.slice(0).sort((a, b) => Math.random() - 0.5)
-  //     return {
-  //       title,
-  //       cate: randomCats.slice(0, 2)
-  //     }
-  //   })
-  //   await Article.deleteMany({})
-  //   await Article.insertMany(newsList)
-  //   res.send(newsList)
-  // })
 
   //新闻数据接口
   router.get('/news', async (req, res) => {
@@ -87,48 +70,6 @@ module.exports = app => {
     res.send(cats)
   })
 
-  //插入英雄数据>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-  // router.get('/heros/init', async (req, res) => {
-  // const data = [
-  //   {
-  //     "name": "战士",
-  //     "hero_list": [
-  //       {
-  //         "name": "赵云",
-  //         "avatar": "https://game.gtimg.cn/images/yxzj/img201606/heroimg/107/107.jpg"
-  //       },
-  //       {
-  //         "name": "墨子",
-  //         "avatar": "https://game.gtimg.cn/images/yxzj/img201606/heroimg/108/108.jpg"
-  //       },
-  //       {
-  //         "name": "钟无艳",
-  //         "avatar": "https://game.gtimg.cn/images/yxzj/img201606/heroimg/117/117.jpg"
-  //       }
-  //     ]
-  //   }
-  // ]
-
-  //   const Heros = []
-  //   for (let cate of data) {
-  //     if (cate.name !== '热门') {
-  //       const currentCate = await Category.find({ name: cate.name })
-  //       const heroList = cate.hero_list.map(hero => {
-  //         return {
-  //           name: hero.name,
-  //           avatar: hero.avatar,
-  //           cate: currentCate
-  //         }
-  //       })
-  //       Heros.push(...heroList)
-  //     }
-  //   }
-  //   await Hero.deleteMany({})
-  //   await Hero.insertMany(Heros)
-  //   res.send(Heros)
-  // })
-
   // 英雄列表数据请求接口
   router.get('/heros', async (req, res) => {
     // const cates = await Category.findOne({
@@ -149,13 +90,13 @@ module.exports = app => {
         }
       }
     ])
-    const subCates = cates.map(cate => cate._id)
-    cates.unshift({
-      name: '热门',
-      hero_list: await Hero.find().where({
-        cate: { $in: subCates }
-      }).limit(10).lean()
-    })
+    // const subCates = cates.map(cate => cate._id)
+    // cates.unshift({
+    //   name: '热门',
+    //   hero_list: await Hero.find().where({
+    //     cate: { $in: subCates }
+    //   }).limit(10).lean()
+    // })
     res.send(cates)
   })
 
@@ -171,6 +112,89 @@ module.exports = app => {
   // 根据id获取单个英雄数据
   router.get('/hero/:id', async (req, res) => {
     res.send(await Hero.findById(req.params.id).populate('cate downWind.equipment upWind.equipment partners.hero restrained.hero restraint.hero'))
+  })
+
+  // 获取精彩视频数据接口
+  router.get('/videos', async (req, res) => {
+    // 获取赛事视频数据
+    // const data = [{ "title": "王者荣耀世冠：远游之枪华丽收割，花满楼世冠马可波罗击杀集锦", "url": "https://pvp.qq.com/m/m201606/detail.shtml?G_Biz=18&tid=550567&e_code=pvpweb_m.statictypenew.type751", "img": "https://puui.qpic.cn/qqvideo_ori/0/z092122i7uv_1280_720/0", "play_volume": "4.6万" }, { "title": "Djie一闪侧翼进场，梦奇小爪子疯狂乱舞！", "url": "https://pvp.qq.com/m/m201606/detail.shtml?G_Biz=18&tid=550792&e_code=pvpweb_m.statictypenew.type751", "img": "https://puui.qpic.cn/qqvideo_ori/0/g0921jhs0ha_1280_720/0", "play_volume": "3.1万" }, { "title": "花海云中君暴走时刻，这波三杀真的帅气！", "url": "https://pvp.qq.com/m/m201606/detail.shtml?G_Biz=18&tid=550566&e_code=pvpweb_m.statictypenew.type751", "img": "https://puui.qpic.cn/qqvideo_ori/0/r09212zlrm4_1280_720/0", "play_volume": "2.3万" }, { "title": "世冠雨雨关羽集锦：这就是实力！千万雄兵莫敢当，单刀匹马斩四方", "url": "https://pvp.qq.com/m/m201606/detail.shtml?G_Biz=18&tid=550251&e_code=pvpweb_m.statictypenew.type751", "img": "https://puui.qpic.cn/qqvideo_ori/0/b0921yawkou_1280_720/0", "play_volume": "3.2万" }]
+
+    // 赛事视频数据
+    const raceVideoData = await Strategy.find({ type: 'race' }).limit(4)
+
+    // 获取精品栏目和赛事精品数据
+    const newestParent = await Category.find({
+      name: { $in: ['精品栏目', '赛事精品'] }
+    })
+
+    const newest = await Category.find({
+      name: '最新',
+      parent: { $in: newestParent.map(item => item._id) }
+    })
+
+    // 精品栏目数据
+    const BoutiqueSectionData = await Strategy.find({ cate: { $elemMatch: { $eq: newest[0]._id } } }).limit(4)
+    // 赛事精品数据
+    const raceBoutique = await Strategy.find({ cate: { $elemMatch: { $eq: newest[1]._id } } }).limit(4)
+
+    // 获取英雄攻略数据
+    // const hotParent = await Category.find({ name: '英雄列表' })
+    // const hot = await Category.find().where({
+    //   name: '热门',
+    //   parent: hotParent[0]._id
+    // })
+    // const hotHero = await Hero.find({ cate: { $elemMatch: { $eq: hot[0]._id } } })
+    const hotHero = await Hero.find({ name: '后羿' })
+
+    // 英雄攻略数据
+    const heroStrategy = await Strategy.find({ heros: { $elemMatch: { $eq: hotHero[0]._id } } }).limit(4)
+
+    const finalData = [[...BoutiqueSectionData], [...heroStrategy], [...raceBoutique], [...raceVideoData]]
+    const wonderfulVideoData = ['精品栏目', '英雄攻略', '赛事精品', '赛事视频'].map((item, i) => {
+      return {
+        name: item,
+        videos: finalData[i]
+      }
+    })
+
+    res.send(wonderfulVideoData)
+  })
+
+  // 获取图文攻略数据接口
+  router.get('/graphics', async (req, res) => {
+
+    // console.log(req.query);
+
+    if (req.query.id && req.query.pageNum) {
+
+      const skipNum = 8 * (req.query.pageNum)
+      const cate = await Category.findById(req.query.id)
+      const data = await Strategy.find({ cate: { $elemMatch: { $eq: cate._id } } }).skip(skipNum).limit(8)
+      res.send(data)
+
+    } else {
+
+      const parentCate = await Category.findOne({ name: '图文攻略' })
+
+      const data = await Category.aggregate([
+        { $match: { parent: parentCate._id } },
+        {
+          $lookup: {
+            from: 'strategies',
+            localField: '_id',
+            foreignField: 'cate',
+            as: 'graphic_list'
+          }
+        },
+        {
+          $addFields: {
+            graphic_list: { $slice: ['$graphic_list', 8] }
+          }
+        }
+      ])
+      res.send(data)
+    }
+
   })
 
 }

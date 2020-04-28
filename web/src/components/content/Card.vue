@@ -1,8 +1,8 @@
 <template>
-  <div class="card bgc-w" :class="{padding}">
+  <div class="clearfix card bgc-w" :class="{padding}">
     <!-- 标题 -->
     <div v-if="title" :class="{padding: !padding}">
-      <div class="title p15-0" :class="{'border': titleBorder}">
+      <div class="title p15-0" :class="{'title-border': titleBorder, 'mb12': titleMargin}">
         <slot name="icon-l"></slot>
         <span class="pl20 fs16" :class="{bold}">{{title}}</span>
         <slot name="icon-r"></slot>
@@ -10,25 +10,28 @@
       </div>
     </div>
     <!-- 导航栏 -->
+    <slot name="nav"></slot>
     <div
-      v-if="data.length!==0"
-      class="card-nav-bar d-flex fc-2mb15 mb10"
-      :class="{'jc-between':!around,'jc-around':around,'nav-border': navBorder,'nav-margin':!padding}"
+      v-if="data.length!==0 && nav"
+      class="card-nav-bar fc-2 mb15"
+      :class="{'nav-border': navBorder,'nav-margin':!padding, 'd-flex': !auto, 'jc-between': !auto, 'auto': auto }"
     >
-      <div class="nav-item fs13 fs14" v-for="(item,i) in data" :key="i" @click="navClick(i)">
+      <div class="nav-item fs13" v-for="(item,i) in data" :key="i" @click="navClick(i,item.name)">
         <span :class="{ active: currentIndex === i }">{{item.name?item.name:item}}</span>
       </div>
     </div>
     <slot name="content"></slot>
     <swiper
+      v-if="data.length!==0"
       :options="swiperOption"
       ref="mySwiper"
-      @slide-change="() => {currentIndex =$refs.mySwiper.swiper.realIndex}"
+      @slide-change="slideChange"
     >
       <swiper-slide v-for="(item, i) in data" :key="i">
         <slot :item="item"></slot>
       </swiper-slide>
     </swiper>
+    <slot name="bottom"></slot>
   </div>
 </template>
  
@@ -40,7 +43,8 @@ export default {
       swiperOption: {
         autoHeight: true
       },
-      currentIndex: 0
+      currentIndex: 0,
+      currentTitle: "最新"
     }
   },
   props: {
@@ -54,6 +58,10 @@ export default {
         return []
       }
     },
+    nav: {
+      type: Boolean,
+      default: true
+    },
     titleBorder: {
       type: Boolean,
       default: false
@@ -62,7 +70,7 @@ export default {
       type: Boolean,
       default: false
     },
-    around: {
+    auto: {
       type: Boolean,
       default: false
     },
@@ -73,13 +81,24 @@ export default {
     padding: {
       type: Boolean,
       default: true
+    },
+    titleMargin: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
-    navClick(i) {
+    navClick(i, navTitle) {
       this.$refs.mySwiper.swiper.slideTo(i)
+      this.currentTitle = navTitle
+      this.$emit('cardNavClick', this.currentIndex, this.currentTitle)
+    },
+    slideChange() {
+      this.currentIndex = this.$refs.mySwiper.swiper.realIndex
+      this.currentTitle = this.data[this.currentIndex] && this.data[this.currentIndex].name
+      this.$emit('cardNavClick', this.currentIndex, this.currentTitle)
     }
-  },
+  }
 }
 </script>
  
@@ -102,8 +121,18 @@ export default {
     border-bottom: 0.04rem solid #e9ecee;
   }
   .card-nav-bar {
+    width: 100%;
     height: 0.96rem;
     line-height: 0.96rem;
+    &.auto {
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      .nav-item {
+        display: inline-block;
+        margin-right: 0.72rem;
+      }
+    }
 
     &.nav-border {
       padding-bottom: 1.2rem;
