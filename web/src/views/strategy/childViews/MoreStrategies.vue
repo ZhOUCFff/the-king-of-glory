@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 1.8rem">
+  <div>
     <div class="nav">
       <ul class="d-flex jc-between">
         <li
