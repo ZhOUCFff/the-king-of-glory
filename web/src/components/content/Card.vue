@@ -27,7 +27,7 @@
       ref="mySwiper"
       @slide-change="slideChange"
     >
-      <swiper-slide v-for="(item, i) in data" :key="i">
+      <swiper-slide style="padding:0 0.0082rem" v-for="(item, i) in data" :key="i">
         <slot :item="item"></slot>
       </swiper-slide>
     </swiper>
