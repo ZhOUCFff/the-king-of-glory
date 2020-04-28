@@ -4,17 +4,19 @@
       <!-- 轮播图 -->
       <swiper class="swiper" v-if="adList" :options="swiperOption">
         <swiper-slide v-for="(item,i) in adList.items" :key="i">
-          <img class="w100 h100" :src="item.img" alt />
+          <a class="d-block w100 h100" :href="item.url">
+            <img class="w100 h100" :src="item.img" alt />
+          </a>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
       <!-- 入口 -->
       <div class="entry bgc-w m15-0 fc-2">
         <div :class="{'entry-hidden': !isEntry}" class="hidden-height d-flex f-wrap">
-          <div class="entry-list" v-for="(item,i) in spriteData" :key="i">
+          <a class="entry-list" :href="item.url" v-for="(item,i) in spriteData" :key="i">
             <i :style="item.position"></i>
-            <div>{{item.text}}</div>
-          </div>
+            <div class="fc-2">{{item.text}}</div>
+          </a>
         </div>
         <div class="entry-btn t-center" @click="entryBtnClick">
           <i :class="{is_entry:!isEntry}"></i>
@@ -170,51 +172,64 @@ export default {
       spriteData: [
         {
           text: '爆料站',
-          position: { 'background-position': '-8.78rem -2.6rem' }
+          position: { 'background-position': '-8.78rem -2.6rem' },
+          url: "https://pvp.qq.com/m/m201706/coming/index.htm"
         },
         {
           text: '故事站',
-          position: { 'background-position': '-12.58rem -2.6rem' }
+          position: { 'background-position': '-12.58rem -2.6rem' },
+          url: "https://pvp.qq.com/act/a20160510story/index.htm?ADTAG=PC.QrCode.TG"
         },
         {
           text: '周边商城',
-          position: { 'background-position': '-4.98rem -0.12rem' }
+          position: { 'background-position': '-4.98rem -0.12rem' },
+          url: "https://pvp.qq.com/mall/m"
         },
         {
           text: '体验服',
-          position: { 'background-position': '-1.26rem -2.6rem' }
+          position: { 'background-position': '-1.26rem -2.6rem' },
+          url: "https://pvp.qq.com/cp/a20161116tyf/page01.htm"
         },
         {
           text: '新人专区',
-          position: { 'background-position': '-12.52rem -0.12rem' }
+          position: { 'background-position': '-12.52rem -0.12rem' },
+          url: "https://pvp.qq.com/m/m201606/goCenter.shtml"
         },
         {
           text: '荣耀传承',
-          position: { 'background-position': '-4.98rem -2.56rem' }
+          position: { 'background-position': '-4.98rem -2.56rem' },
+          url: "https://pvp.qq.com/m/memory/index.shtml"
         },
         {
           text: '模拟战资料库',
-          position: { 'background-position': '-1.28rem -0.12rem' }
+          position: { 'background-position': '-1.28rem -0.12rem' },
+          url: "https://pvp.qq.com/m/wzmnzm/index.html"
         },
         {
           text: '王者营地',
-          position: { 'background-position': '-8.76rem -0.12rem' }
+          position: { 'background-position': '-8.76rem -0.12rem' },
+          url: "https://image.ttwz.qq.com/wzry/wzryzs_download_4001.htm?ADTAG=mpvp.qq.com"
         },
         {
           text: '公众号',
-          position: { 'background-position': '0.16rem -16.64rem' }
+          position: { 'background-position': '0.16rem -16.64rem' },
+          url: "https://game.weixin.qq.com/cgi-bin/comm/openlink?noticeid=90102708&appid=wx95a3a4d7c627e07d&url=https%3A%2F%2Fgame.weixin.qq.com%2Fcgi-bin%2Fh5%2Fstatic%2Fsubscribe%2Findex.html%3Fappid%3Dwx95a3a4d7c627e07d#wechat_redirect"
         },
         {
-          text: '版本介绍'
+          text: '版本介绍',
+          url: "https://pvp.qq.com/cp/a20190320bbgxsmm/index.html"
         },
         {
-          text: '对局环境'
+          text: '对局环境',
+          url: "https://pvp.qq.com/cp/a20190917station/index.html"
         },
         {
-          text: '无限王者团'
+          text: '无限王者团',
+          url: "https://pvp.qq.com/cp/a20190827boundlessp/index.html"
         },
         {
-          text: '创意互动营'
+          text: '创意互动营',
+          url: "https://pvp.qq.com/m/hdy/p1/index.html"
         }
       ],
       //收起展开
@@ -357,6 +372,7 @@ export default {
   }
 
   .entry-list {
+    display: block;
     position: relative;
     width: 25%;
     text-align: center;
@@ -380,7 +396,9 @@ export default {
       content: "";
     }
     &:nth-child(7) {
-      color: #999;
+      div {
+        color: #999;
+      }
     }
     &:nth-child(4n)::after {
       width: 0;
@@ -400,7 +418,9 @@ export default {
       }
     }
     &:nth-child(12) {
-      color: #999;
+      div {
+        color: #999;
+      }
       i {
         width: 1.84rem;
         background: url("~assets/img/sprite/wxwzt.png") no-repeat 0 0.16rem;
@@ -410,7 +430,9 @@ export default {
     &:nth-child(13) {
       background: url("~assets/img/sprite/cyhdy.png") no-repeat 1.16rem 0.32rem;
       background-size: 1.4rem 1.4rem;
-      color: #999;
+      div {
+        color: #999;
+      }
     }
   }
   //收起展开按钮
@@ -425,7 +447,7 @@ export default {
       background-size: 15rem 18.2rem;
       width: 0.4rem;
       height: 0.4rem;
-      transition: all 0.3s;
+      // transition: all 0.3s;
       // transform: rotate(180deg);
       &.is_entry {
         transform: rotate(180deg);

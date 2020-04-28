@@ -203,7 +203,6 @@ export default {
  
 <style lang="scss" scoped>
 .hero {
-  margin-top: 1.8rem;
   font-family: "Mcrosoft YaHei";
   .more {
     vertical-align: middle;
