@@ -36,6 +36,9 @@ function GUID_req(config) {
       Vue.prototype.$message.error(err.response.data.message)
       router.push('/login')
     }
+    if (err.response.status === 403) {
+      Vue.prototype.$message.error(err.response.data.message)
+    }
 
   })
 
@@ -67,6 +70,9 @@ function upload(config) {
     if (err.response.status === 401) {
       Vue.prototype.$message.error(err.response.data.message)
       router.push('/login')
+    }
+    if (err.response.status === 403) {
+      Vue.prototype.$message.error(err.response.data.message)
     }
 
   })

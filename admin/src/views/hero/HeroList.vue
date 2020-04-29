@@ -4,14 +4,16 @@
     <el-card>
       <el-row>
         <el-col :span="6">
-          <el-input maxlength="8" clearable placeholder="请输入英雄名称" v-model="heroQuery"></el-input>
+          <el-input  maxlength="8" clearable placeholder="请输入英雄名称" v-model="heroQuery"></el-input>
         </el-col>
-        <el-col :span="2">
-          <el-button type="primary" @click="searchHero">搜索</el-button>
+        <el-col :span="3">
+          <el-button style="margin-left:20px" type="primary" icon="el-icon-search" @click="searchHero">搜索</el-button>
+        </el-col>
+        <el-col :span="4" >
+          <el-button type="primary" icon="el-icon-plus" @click="addHeroClick">添加英雄</el-button>
         </el-col>
       </el-row>
-      <el-button type="primary" @click="addHeroClick">添加英雄</el-button>
-
+      
       <el-table :data="heroList" border stripe>
         <el-table-column type="expand">
           <template slot-scope="scope">
@@ -32,8 +34,8 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="small" type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-button size="small" type="danger" @click="_delete(scope.row)">删除</el-button>
+            <el-button size="small" type="primary" icon="el-icon-edit" @click="edit(scope.row)">编辑</el-button>
+            <el-button size="small" type="danger" icon="el-icon-delete" @click="_delete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -101,6 +103,7 @@ export default {
         })
 
         const res = await deleteHero(row._id)
+        if(!res) return
         this.$message.success(res.data.message)
         this.getHeroList()
 
@@ -111,6 +114,7 @@ export default {
     },
     async searchHero() {
       this.pageParams.query = this.heroQuery
+      this.pageParams.pagenum = 1
       this.getHeroList(this.pageParams)
     },
     handleSizeChange(pagesize) {

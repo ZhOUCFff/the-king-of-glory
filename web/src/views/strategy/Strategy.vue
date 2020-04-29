@@ -10,11 +10,11 @@
       @pullingUp="pullingUp"
     >
       <!-- 轮播图 -->
-      <swiper class="swiper" v-if="adList" :options="swiperOption">
+      <swiper class="swiper" v-if="adList" :options="swiperOption" ref="swiper">
         <swiper-slide v-for="(item,i) in adList.items" :key="i">
           <img class="w100 h100" :src="item.img" alt />
         </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
+        <div :class="{move:isPaginationMove}" class="swiper-pagination" slot="pagination"></div>
       </swiper>
       <!-- 热门视频 -->
       <card
@@ -388,7 +388,8 @@ export default {
       raceOutiqueTitle: "最新",
       videoTitle: "王者时刻",
       // 滚动防抖函数
-      heroListScrollDebounce: null
+      heroListScrollDebounce: null,
+      isPaginationMove: false
     }
   },
   computed: {
@@ -540,6 +541,10 @@ export default {
     this.getGraphics()
   },
   mounted() {
+    const timer = setTimeout(() => {
+      this.isPaginationMove = true
+      clearTimeout(timer)
+    }, 1000)
     this.scroll.refresh()
     this.scrollX = true
     this.heroListScrollDebounce = debounce(() => {
@@ -547,7 +552,11 @@ export default {
     }, 10)
   },
   activated() {
+    this.$refs.swiper && this.$refs.swiper.swiper.autoplay.start()
     this.scroll.refresh()
+  },
+  deactivated() {
+    this.$refs.swiper && this.$refs.swiper.swiper.autoplay.stop()
   }
 }
 </script>
@@ -562,6 +571,20 @@ export default {
 .swiper {
   height: 6.76rem;
   margin-top: 0.6rem;
+}
+
+//轮播图分页按钮
+.swiper-pagination {
+  width: 100%;
+  text-align: right;
+  padding-right: 0.2rem;
+  bottom: 0;
+  transition: all 0.5s;
+  transition-delay: 2s;
+}
+
+.move {
+  bottom: 15px !important;
 }
 
 .card-icon-l {

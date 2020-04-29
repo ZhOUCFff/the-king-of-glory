@@ -288,10 +288,12 @@ export default {
     async save() {
       if (!this.id) {
         const res = await createHero(this.model)
+        if(!res) return
         this.$message.success('新建英雄成功')
         this.$router.push('/hero/list')
       } else {
         const res = await updateHero(this.id, this.model)
+        if(!res) return
         this.$message.success('编辑英雄成功')
         this.$router.push('/hero/list')
       }

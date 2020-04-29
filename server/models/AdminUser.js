@@ -8,7 +8,8 @@ const adminUserSchema = new mongoose.Schema({
     set(val) {
       return require('bcryptjs').hashSync(val, 10)
     }
-  }
+  },
+  level: { type: String }
 })
 
 const AdminUser = mongoose.model('AdminUser', adminUserSchema)

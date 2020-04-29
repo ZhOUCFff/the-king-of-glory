@@ -62,11 +62,12 @@ export default {
     async save() {
       if (!this.id) {
         const res = await createArticle(this.model)
+        if(!res) return
         this.$message.success('创建文章成功')
         this.$router.push('/article/list')
       } else {
         const res = await updateArticle(this.id, this.model)
-        // console.log(res)
+        if(!res) return
         this.$message.success('编辑文章成功')
         this.$router.push('/article/list')
       }

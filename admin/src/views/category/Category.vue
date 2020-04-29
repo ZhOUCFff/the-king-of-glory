@@ -2,7 +2,7 @@
   <div>
     <breadcrumb text="分类列表" />
     <el-card>
-      <el-button size="small" type="primary" @click="addCate">添加分类</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="addCate">添加分类</el-button>
       <tree-table
         :data="cateList"
         show-index
@@ -13,8 +13,8 @@
         border
       >
         <template slot="operate" slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editCateClick(scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="deleteCateClick(scope.row)">删除</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-edit" @click="editCateClick(scope.row)">编辑</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteCateClick(scope.row)">删除</el-button>
         </template>
       </tree-table>
     </el-card>
@@ -135,7 +135,7 @@ export default {
         }
       }
 
-      console.log(data);
+      // console.log(data);
 
       this.cateList = data
 
@@ -149,7 +149,7 @@ export default {
     },
     async okAdd() {
       const res = await createCate(this.newModel)
-      if (!res) return this.$message.error('添加分类失败')
+      if (!res) return 
       this.$message.success('添加分类成功')
       this.getCateList()
       this.addDialogVisible = false
@@ -167,7 +167,7 @@ export default {
     },
     async okEdit() {
       const res = await updateCate(this.id, this.model)
-      if (!res) return this.$message.error('编辑分类失败')
+      if (!res) return 
       this.$message.success('编辑分类成功')
       this.getCateList()
       this.editDialogVisible = false
@@ -184,7 +184,7 @@ export default {
         if (row.children && row.children.length > 0) return this.$message.error('无法删除包含子分类的父级分类')
 
         const res = await deleteCate(row._id)
-        if (!res) return this.$message.error('删除分类失败')
+        if (!res) return 
         this.$message.success('删除分类成功')
         this.getCateList()
       } catch (error) {

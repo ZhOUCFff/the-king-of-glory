@@ -2,7 +2,7 @@
   <div>
     <scroll class="scroll" :probe-type="3" click pullUpLoad ref="homeScroll" @pullingUp="pullingUp">
       <!-- 轮播图 -->
-      <swiper class="swiper" v-if="adList" :options="swiperOption">
+      <swiper class="swiper" v-if="adList" :options="swiperOption" ref="swiper">
         <swiper-slide v-for="(item,i) in adList.items" :key="i">
           <a class="d-block w100 h100" :href="item.url">
             <img class="w100 h100" :src="item.img" alt />
@@ -342,7 +342,11 @@ export default {
     this.scroll.refresh()
   },
   activated() {
+    this.$refs.swiper && this.$refs.swiper.swiper.autoplay.start()
     this.scroll.refresh()
+  },
+  deactivated() {
+    this.$refs.swiper && this.$refs.swiper.swiper.autoplay.stop()
   }
 }
 </script>

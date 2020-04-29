@@ -45,9 +45,9 @@
   display: block;
 }
 
-.el-icon-plus::before {
+/* .el-icon-plus::before {
   line-height: 125px;
-}
+} */
 
 .el-card {
   position: relative;

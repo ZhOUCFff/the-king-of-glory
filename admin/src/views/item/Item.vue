@@ -2,7 +2,7 @@
   <div>
     <breadcrumb text="装备列表" />
     <el-card>
-      <el-button type="primary" @click="addItemClick">添加装备</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="addItemClick">添加装备</el-button>
       <!-- 列表 -->
       <el-table :data="itemList" border stripe>
         <el-table-column type="expand">
@@ -21,8 +21,8 @@
         <el-table-column label="星级" prop="star"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="_delete(scope.row)">删除</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" icon="el-icon-delete" @click="_delete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -140,7 +140,7 @@ export default {
         })
 
         const res = await deleteItem(row._id)
-        if (!res) return this.$message.error('删除失败')
+        if (!res) return 
         this.$message.success(res.data.message)
         this.getItemList()
 

@@ -2,7 +2,7 @@
   <div>
     <breadcrumb text="文章列表" />
     <el-card>
-      <el-button type="primary" @click="addArticle">添加文章</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="addArticle">添加文章</el-button>
       <el-table :data="articleList">
         <el-table-column type="index" label="序号"></el-table-column>
         <el-table-column label="所属分类" border stripe>
@@ -14,8 +14,8 @@
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="small" type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-button size="small" type="danger" @click="_delete(scope.row)">删除</el-button>
+            <el-button size="small" type="primary" icon="el-icon-edit" @click="edit(scope.row)">编辑</el-button>
+            <el-button size="small" type="danger" icon="el-icon-delete" @click="_delete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,6 +77,7 @@ export default {
         })
 
         const res = await deleteArticle(row._id)
+        if(!res) return
         this.$message.success('删除成功')
         this.getArticleList()
 

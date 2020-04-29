@@ -3,13 +3,13 @@
     <Breadcrumb text="广告位列表" />
 
     <el-card>
-      <el-button type="primary" @click="addAd">添加广告位</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="addAd">添加广告位</el-button>
       <el-table :data="adList" border stripe>
         <el-table-column label="广告位名称" prop="name"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="small" type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-button size="small" type="danger" @click="_delete(scope.row)">删除</el-button>
+            <el-button size="small" type="primary" icon="el-icon-edit" @click="edit(scope.row)">编辑</el-button>
+            <el-button size="small" type="danger" icon="el-icon-delete" @click="_delete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -26,7 +26,7 @@
           <el-input v-model="model.name"></el-input>
         </el-form-item>
 
-        <el-button type="primary" size="itemssmall" @click="addAds">添加广告位信息</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="itemssmall" @click="addAds">添加广告位信息</el-button>
         <el-row :gutter="20" type="flex" style="flex-wrap: wrap">
           <el-col v-for="(item,i) in model.items" :key="i" :span="12" class="skill-item">
             <el-card>
@@ -112,6 +112,7 @@ export default {
         })
 
         const res = await deleteAd(row._id)
+        if(!res) return
         this.$message.success('删除成功')
         this.getAdList()
 
@@ -135,7 +136,8 @@ export default {
         this.dialogVisible = false
       } else {
         const res = await updateAd(this.id, this.model)
-        console.log(res)
+        if (!res) return
+        this.$message.success('编辑成功')
         this.getAdList()
         this.dialogVisible = false
       }

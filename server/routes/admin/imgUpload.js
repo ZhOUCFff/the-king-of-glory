@@ -3,8 +3,9 @@ module.exports = (app, multer) => {
   const router = express.Router()
 
   const auth = require('../../middlleware/validateMiddleWear')
+  const access = require('../../middlleware/access')
 
-  app.use('/admin/api/upload', auth(app), router)
+  app.use('/admin/api/upload', auth(app), access(app), router)
 
   //物品图片上传
   const item = multer({ dest: __dirname + '/../../uploads/items' })

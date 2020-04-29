@@ -5,6 +5,7 @@ module.exports = app => {
 
   //登录验证中间件
   const auth = require('../../middlleware/validateMiddleWear')
+  const access = require('../../middlleware/access')
 
   // 监听所有通用接口-----------------------------------------------------------
   app.use('/admin/api/rest/:resource', auth(app), async (req, res, next) => {
@@ -14,7 +15,7 @@ module.exports = app => {
   }, router)
 
   //创建
-  router.post('/', async (req, res) => {
+  router.post('/', access(app), async (req, res) => {
     try {
       const model = await req.Model.create(req.body)
       res.send(model)
@@ -144,13 +145,13 @@ module.exports = app => {
   })
 
   //编辑提交
-  router.put('/:id', async (req, res) => {
+  router.put('/:id', access(app), async (req, res) => {
     const model = await req.Model.findByIdAndUpdate(req.params.id, req.body)
     res.send(model)
   })
 
   //根据id删除
-  router.delete('/:id', async (req, res) => {
+  router.delete('/:id', access(app), async (req, res) => {
     // 禁止删除有子分类的父级分类
     if (req.Model.modelName === 'Category') {
 
