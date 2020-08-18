@@ -14,19 +14,19 @@ function getNews() {
 
 function getHeros() {
   return request({
-    url: '/home//heros'
+    url: '/home/heros'
   })
 }
 
 function getVideos() {
   return request({
-    url: '/home//videos'
+    url: '/home/videos'
   })
 }
 
 function getGraphics(params) {
   return request({
-    url: '/home//graphics',
+    url: '/home/graphics',
     params
   })
 }
@@ -34,13 +34,13 @@ function getGraphics(params) {
 //根据id查询文章
 function getArticleById(id) {
   return request({
-    url: `/home//article/${id}`
+    url: `/home/article/${id}`
   })
 }
 
 function getHeroById(id) {
   return request({
-    url: `/home//hero/${id}`
+    url: `/home/hero/${id}`
   })
 }
 

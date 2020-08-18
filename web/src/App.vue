@@ -23,25 +23,35 @@ export default {
   name: 'app',
   components: {
     TopBar,
-    NavBar
+    NavBar,
   },
   computed: {
     path() {
       return this.$route.path
     },
     isTopBarShow() {
-      return (this.path === '/home' || this.path === '/strategy' || this.path === '/race') || this.$store.state.isTopBarShow
+      return (
+        this.path === '/home' ||
+        this.path === '/strategy' ||
+        this.path === '/race' ||
+        this.$store.state.isTopBarShow
+      )
     },
     isNavBarShow() {
-      return (this.path === '/home' || this.path === '/strategy' || this.path === '/race') || this.$store.state.isNavBarShow
-    }
-  }
+      return (
+        this.path === '/home' ||
+        this.path === '/strategy' ||
+        this.path === '/race' ||
+        this.$store.state.isNavBarShow
+      )
+    },
+  },
 }
 </script>
 
 <style lang="scss">
 // 导入初始化样式
-@import "~assets/css/normal.scss";
+@import '~assets/css/normal.scss';
 
 .scroll {
   touch-action: none;

@@ -69,6 +69,7 @@
               <p class="detail p15-0">小提示：{{currentSkill.tips}}</p>
             </div>
           </div>
+
           <div class="suggest fs13">
             <!-- 出装推荐 -->
             <card title="出装推荐" bold>
@@ -166,7 +167,7 @@ export default {
   },
   computed: {
     currentSkill() {
-      return this.heroData || this.heroData.skills[this.currentIndex]
+      return this.heroData ? this.heroData.skills[this.currentIndex] : {}
     }
   },
   components: {
